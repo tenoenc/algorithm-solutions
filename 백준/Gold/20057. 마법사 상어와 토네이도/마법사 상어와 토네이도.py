@@ -8,8 +8,21 @@ grid = [list(map(int, input().split())) for _ in range(N)]
 dy, dx = [0, 1, 0, -1], [-1, 0, 1, 0]
 cy, cx = N // 2, N // 2
 
+left_spread = [
+	(-1, 0, 0.01), (1, 0, 0.01), (-1, -1, 0.07), (1, -1, 0.07),
+    (-2, -1, 0.02), (2, -1, 0.02), (-1, -2, 0.1), (1, -2, 0.1),
+    (0, -3, 0.05)
+]
+
+spreads = [left_spread]
+
+for i in range(3):
+	new_spread = []
+	for y, x, ratio in spreads[-1]:
+		new_spread.append((-x, y, ratio))
+	spreads.append(new_spread)
+
 moves = []
-amount = 0
 
 for i in range(1, N):
 	for j in range(2 if i < N-1 else 3):
@@ -18,40 +31,29 @@ for i in range(1, N):
 		moves.append((cy, cx, nd))
 		cy, cx = ny, nx
 
-def get_adj(y, x, d):
-	unp1 = (1/100, y + dy[(d+1)%4], x + dx[(d+1)%4])
-	dnp1 = (1/100, y + dy[(d+3)%4], x + dx[(d+3)%4])
-	unp2 = (2/100, y + dy[d] + dy[(d+1)%4] * 2, x + dx[d] + dx[(d+1)%4] * 2)
-	dnp2 = (2/100, y + dy[d] + dy[(d+3)%4] * 2, x + dx[d] + dx[(d+3)%4] * 2)
-	unp5 = (5/100, y + dy[d] * 3, x + dx[d] * 3)
-	unp7 = (7/100, y + dy[d] + dy[(d+1)%4], x + dx[d] + dx[(d+1)%4])
-	dnp7 = (7/100, y + dy[d] + dy[(d+3)%4], x + dx[d] + dx[(d+3)%4])
-	unp10 = (10/100, y + dy[d] * 2 + dy[(d+1)%4], x + dx[d] * 2 + dx[(d+1)%4])
-	dnp10 = (10/100, y + dy[d] * 2 + dy[(d+3)%4], x + dx[d] * 2 + dx[(d+3)%4])
-
-	return [unp1, dnp1, unp2, dnp2, unp5, unp7, dnp7, unp10, dnp10]
-
+ans = 0
 
 def tonado(xy, xx, d):
-	global amount
+	global ans
 	yy, yx = xy + dy[d], xx + dx[d]
 	ay, ax = xy + dy[d] * 2, xx + dx[d] * 2
 
 	yval = grid[yy][yx]
 
-	for p, y, x in get_adj(xy, xx, d):
-		dval = int(grid[yy][yx] * p)
+	for dy_s, dx_s, ratio in spreads[d]:
+		ny, nx = xy + dy_s, xx + dx_s
+		dval = int(grid[yy][yx] * ratio)
 		yval -= dval
-		if 0 <= y < N and 0 <= x < N:
-			grid[y][x] += dval
+		if 0 <= ny < N and 0 <= nx < N:
+			grid[ny][nx] += dval
 		else:
-			amount += dval
+			ans += dval
 
 	grid[yy][yx] = 0
 	if 0 <= ay < N and 0 <= ax < N:
 		grid[ay][ax] += yval
 	else:
-		amount += yval
+		ans += yval
 
 while moves:
 	sy, sx, d = moves.pop(0)
@@ -77,4 +79,4 @@ while moves:
 		for y in range(sy, ey, -1):
 			tonado(y, x, d)
 
-print(amount)
+print(ans)
