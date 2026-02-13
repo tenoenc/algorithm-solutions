@@ -1,0 +1,5 @@
+SELECT COUNT(*) AS USERS
+FROM USER_INFO ui
+WHERE (ui.JOINED >= '2021-01-01' AND ui.JOINED <= '2021-12-31') AND
+    (ui.AGE >= 20 AND ui.AGE <= 29);
+    
