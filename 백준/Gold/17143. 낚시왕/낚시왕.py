@@ -23,37 +23,51 @@ for _ in range(C):
 	new_sharks = dict()
 
 	for (y, x), (s, d, z) in sharks.items():
-		ny, nx = y, x
 		if d <= 1:
-			cycle = (R-1) * 2
-			if cycle > 0:
-				ns = s % cycle
-			else:
-				ns = 0
+			if R > 1:
+				cycle = (R-1) * 2
+			
+				if d == 0:
+					dist = cycle - y
+				else:
+					dist = y
 
-			ny, nx = y, x
-			for _ in range(ns):
-				if not (0 <= ny + dy[d] < R):
-					d ^= 1
-				ny += dy[d]
+				dist = (dist + s) % cycle
+
+				if dist < R:
+					ny, nd = dist, 1
+				else:
+					ny, nd = cycle - dist, 0
+			else:
+				ny, nd = y, d
+
+			nx = x
 		else:
-			cycle = (C-1) * 2
-			if cycle > 0:
-				ns = s % cycle
-			else:
-				ns = 0
+			if C > 1:
+				cycle = (C-1) * 2
 
-			ny, nx = y, x
-			for _ in range(ns):
-				if not (0 <= nx + dx[d] < C):
-					d ^= 1
-				nx += dx[d]
+				if d == 3:
+					dist = cycle - x
+				else:
+					dist = x
+
+				dist = (dist + s) % cycle
+
+				if dist < C:
+					nx, nd = dist, 2
+				else:
+					nx, nd = cycle - dist, 3
+			else:
+				nx, nd = x, d
+
+			ny = y
+
 
 		if (ny, nx) in new_sharks:
 			if z > new_sharks[(ny, nx)][2]:
-				new_sharks[(ny, nx)] = (s, d, z)
+				new_sharks[(ny, nx)] = (s, nd, z)
 		else:
-			new_sharks[(ny, nx)] = (s, d, z)
+			new_sharks[(ny, nx)] = (s, nd, z)
 
 	sharks = new_sharks
 
