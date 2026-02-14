@@ -4,6 +4,5 @@ A collection of LeetCode questions to ace the coding interview! - Created using 
 ## Database
 |  |
 | ------- |
-| [0626-exchange-seats](https://github.com/tenoenc/leetcode-solutions/tree/master/0626-exchange-seats) |
 | [1978-employees-whose-manager-left-the-company](https://github.com/tenoenc/leetcode-solutions/tree/master/1978-employees-whose-manager-left-the-company) |
 <!---LeetCode Topics End-->
