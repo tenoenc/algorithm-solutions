@@ -6,6 +6,5 @@ def solution(signals):
             if not (g < ((i-1) % (g + y + r)) + 1 <= g + y):
                 all_yellow = False
         if all_yellow:
-            answer = i
-            break
-    return answer
+            return i
+    return -1
